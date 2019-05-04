@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
+#include <iostream>
 
 #include "window.h"
 
@@ -7,18 +8,47 @@ bool running;
 
 //HMENU menu;		// A window's main menu (on the top of a screen)
 
-/*int main()
+int main()
 {
-	//zn::Frame frame;
-	std::vector<int> nums;
-	nums.push_back(2);
-	nums.push_back(3);
-	nums.push_back(5);
-	nums.push_back(8);
-	printf("%d\n", nums.at(5));
-	system("pause");
-}*/
+	zn::Window test_window(500, 500, 400, 400, "Test Window");
+	zn::Frame test_frame(new zn::SequenceLayout(zn::X_AXIS, 400, 400, 5, 5));
+	test_window.setFrame(&test_frame);
+	
+	test_frame.addElement(zn::Element("Button1", 20, 15));
+	test_frame.addElement(zn::Element("Button2", 20, 15));
+	test_frame.addElement(zn::Element("Button3", 20, 15));
+	test_frame.addElement(zn::Element("Button4", 20, 15));
+	test_frame.addElement(zn::Element("Button5", 20, 15));
 
+	for (int i = 0; i < test_frame.getElements()->size(); i++)
+	{
+		printf(
+			"Element %s (%d, %d, %d, %d)\n",
+			test_frame.getElement(i)->getContents(),
+			test_frame.getElement(i)->getX(),
+			test_frame.getElement(i)->getY(),
+			test_frame.getElement(i)->getWidth(),
+			test_frame.getElement(i)->getHeight()
+		);
+	}
+	
+	test_frame.allignElements();
+
+	for (int i = 0; i < test_frame.getElements()->size(); i++)
+	{
+		printf(
+			"Element %s (%d, %d, %d, %d)\n",
+			test_frame.getElement(i)->getContents(),
+			test_frame.getElement(i)->getX(),
+			test_frame.getElement(i)->getY(),
+			test_frame.getElement(i)->getWidth(),
+			test_frame.getElement(i)->getHeight()
+		);
+	}
+
+	system("pause");
+}
+#if 0
 enum MenuItem
 {
 	MENU_FILE = 1,	// New, Open, Close, Save, Save As
@@ -185,4 +215,4 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous_instance, LPSTR cmd, i
 
 	
 	return 0;
-}
+#endif

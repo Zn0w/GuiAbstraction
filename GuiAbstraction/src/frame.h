@@ -40,7 +40,7 @@ namespace zn {
 
 		Element* getElement(int index)
 		{
-			if (index > 0 && index < elements.size())
+			if (index >= 0 && index < elements.size())
 				return &elements.at(index);
 			else
 				return NULL;
@@ -56,9 +56,11 @@ namespace zn {
 			return NULL;
 		}
 
+		std::vector<Element>* getElements() { return &elements; }
+
 		void allignElements()
 		{
-			// TODO
+			layout->allign(&elements);
 		}
 	};
 

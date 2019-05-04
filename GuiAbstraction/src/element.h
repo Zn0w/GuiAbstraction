@@ -21,6 +21,18 @@ namespace zn {
 
 		inline void setContents(const char* c) { contents = c; }
 		inline const char* getContents() { return contents; }
+
+		Element(const char* c)
+			: x(0), y(0), width(20), height(15), contents(c)
+		{}
+
+		Element(const char* c, int w, int h)
+			: x(0), y(0), width(w), height(h), contents(c)
+		{}
+
+		Element(const char* c, int s_x, int s_y, int w, int h)
+			: x(s_x), y(s_y), width(w), height(h), contents(c)
+		{}
 	};
 
 }

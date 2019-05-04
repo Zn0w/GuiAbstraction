@@ -24,7 +24,12 @@ namespace zn {
 			marginY = m_y;
 		}
 
-		virtual void allign(std::vector<Element> elements) = 0;
+		virtual void allign(std::vector<Element>* elements) = 0;
+
+		inline void setMarginX(int m_x) { marginX = m_x; }
+		inline void setMarginY(int m_y) { marginY = m_y; }
+		inline int getMarginX() { return marginX; }
+		inline int getMarginY() { return marginY; }
 	};
 
 	class AbsoluteLayout : public Layout
@@ -36,7 +41,7 @@ namespace zn {
 			marginY = 0;
 		}
 
-		void allign(std::vector<Element> element)
+		void allign(std::vector<Element>* element)
 		{
 
 		}
@@ -52,46 +57,56 @@ namespace zn {
 	{
 	private:
 		SequenceDirection direction;
+		int width, height;
 
 	public:
-		SequenceLayout(SequenceDirection d)
+		SequenceLayout(SequenceDirection d, int f_w, int f_h)
 			: Layout()
 		{
 			direction = d;
+			width = f_w;
+			height = f_h;
 		}
 
-		SequenceLayout(SequenceDirection d, int m_x, int m_y)
+		SequenceLayout(SequenceDirection d, int f_w, int f_h, int m_x, int m_y)
 			: Layout(m_x, m_y)
 		{
 			direction = d;
+			width = f_w;
+			height = f_h;
 		}
 
-		void allign(std::vector<Element> elements, int width, int height)
+		void allign(std::vector<Element>* elements) override
 		{
-			int next_position = 0;
+			int next_position = marginX;
 			
 			if (direction == X_AXIS)
 			{	
 				int rows = 0;
-				int max_height;
+				int max_height = 0;
 				
-				for (Element element : elements)
+				for (Element element : *elements)
 				{
-					static int sum_width;
+					static int sum_width = marginX;
 
-					sum_width += element.getWidth();
+					sum_width += element.getWidth() + marginX;
 					
 					if (width < sum_width)
 					{
 						rows++;
-						sum_width = 0;
+						sum_width = marginX;
 					}
+
+					if (max_height < element.getHeight())
+						max_height = element.getHeight();
 				}
 				
-				for (Element element : elements)
+				for (int i = 0; i < elements->size(); i++)
 				{
-					element.setX(next_position);
-					element.setY(height / 2);
+					elements->at(i).setX(next_position);
+					elements->at(i).setY((height / 2) - (rows * max_height / 2));
+
+					next_position += elements->at(i).getWidth() + marginX;
 				}
 			}
 
@@ -100,6 +115,10 @@ namespace zn {
 
 			}
 		}
+
+		inline void setFrameSize(int w, int h) { width = w; height = h; }
+		inline int getFrameWidth() { return width; }
+		inline int getFrameHeight() { return height; }
 	};
 
 }
