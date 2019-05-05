@@ -121,11 +121,16 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous_instance, LPSTR cmd, i
 	zn::Frame test_frame(new zn::SequenceLayout(zn::X_AXIS, 400, 400, 5, 5));
 	window_data.setFrame(&test_frame);
 
-	test_frame.addElement(zn::Element("Button1", 20, 15));
-	test_frame.addElement(zn::Element("Button2", 20, 15));
-	test_frame.addElement(zn::Element("Button3", 20, 15));
-	test_frame.addElement(zn::Element("Button4", 20, 15));
-	test_frame.addElement(zn::Element("Button5", 20, 15));
+	test_frame.addElement(zn::Element("Button1", 100, 15));
+	test_frame.addElement(zn::Element("Button2", 100, 15));
+	test_frame.addElement(zn::Element("Button3", 75, 15));
+	test_frame.addElement(zn::Element("Button4", 75, 15));
+	test_frame.addElement(zn::Element("Button5", 100, 15));
+	test_frame.addElement(zn::Element("Button6", 100, 15));
+	test_frame.addElement(zn::Element("Button7", 100, 15));
+	test_frame.addElement(zn::Element("Button8", 75, 15));
+	test_frame.addElement(zn::Element("Button9", 75, 15));
+	test_frame.addElement(zn::Element("Button10", 100, 15));
 
 	for (int i = 0; i < test_frame.getElements()->size(); i++)
 	{

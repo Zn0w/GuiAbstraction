@@ -85,26 +85,24 @@ namespace zn {
 				int rows = 0;
 				int max_height = 0;
 				
-				for (Element element : *elements)
+				for (int i = 0; i < elements->size(); i++)
 				{
 					static int sum_width = marginX;
 
-					sum_width += element.getWidth() + marginX;
+					sum_width += elements->at(i).getWidth() + marginX;
 					
 					if (width < sum_width)
 					{
 						rows++;
 						sum_width = marginX;
+						next_position = marginX;
 					}
 
-					if (max_height < element.getHeight())
-						max_height = element.getHeight();
-				}
-				
-				for (int i = 0; i < elements->size(); i++)
-				{
+					if (max_height < elements->at(i).getHeight())
+						max_height = elements->at(i).getHeight();
+
 					elements->at(i).setX(next_position);
-					elements->at(i).setY((height / 2) - (rows * max_height / 2));
+					elements->at(i).setY((height / 2) + (rows * (max_height + marginY)));
 
 					next_position += elements->at(i).getWidth() + marginX;
 				}
