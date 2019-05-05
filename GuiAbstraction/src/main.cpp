@@ -118,17 +118,17 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous_instance, LPSTR cmd, i
 {
 	//zn::Window window_data(250, 250, 250, 250, "Test window Title");
 	zn::Window window_data(500, 500, 400, 400, "Test Window");
-	zn::Frame test_frame(new zn::SequenceLayout(zn::X_AXIS, 400, 400, 5, 5));
+	zn::Frame test_frame(new zn::SequenceLayout(zn::Y_AXIS, 400, 400, 5, 5));
 	window_data.setFrame(&test_frame);
 
-	test_frame.addElement(zn::Element("Button1", 100, 15));
-	test_frame.addElement(zn::Element("Button2", 100, 15));
+	test_frame.addElement(zn::Element("Button1", 100, 35));
+	test_frame.addElement(zn::Element("Button2", 100, 50));
 	test_frame.addElement(zn::Element("Button3", 75, 15));
 	test_frame.addElement(zn::Element("Button4", 75, 15));
-	test_frame.addElement(zn::Element("Button5", 100, 15));
-	test_frame.addElement(zn::Element("Button6", 100, 15));
+	test_frame.addElement(zn::Element("Button5", 100, 80));
+	test_frame.addElement(zn::Element("Button6", 100, 80));
 	test_frame.addElement(zn::Element("Button7", 100, 15));
-	test_frame.addElement(zn::Element("Button8", 75, 15));
+	test_frame.addElement(zn::Element("Button8", 75, 55));
 	test_frame.addElement(zn::Element("Button9", 75, 15));
 	test_frame.addElement(zn::Element("Button10", 100, 15));
 

@@ -77,11 +77,10 @@ namespace zn {
 		}
 
 		void allign(std::vector<Element>* elements) override
-		{
-			int next_position = marginX;
-			
+		{	
 			if (direction == X_AXIS)
 			{	
+				int next_position = marginX;
 				int rows = 0;
 				int max_height = 0;
 				
@@ -110,7 +109,31 @@ namespace zn {
 
 			else if (direction == Y_AXIS)
 			{
+				int next_position = marginY;
+				int rows = 0;
+				int max_width = 0;
 
+				for (int i = 0; i < elements->size(); i++)
+				{
+					static int sum_height = marginY;
+
+					sum_height += elements->at(i).getHeight() + marginY;
+
+					if (width < sum_height)
+					{
+						rows++;
+						sum_height = marginY;
+						next_position = marginY;
+					}
+
+					if (max_width < elements->at(i).getWidth())
+						max_width = elements->at(i).getWidth();
+
+					elements->at(i).setX((width / 2) + (rows * (max_width + marginX)));
+					elements->at(i).setY(next_position);
+
+					next_position += elements->at(i).getHeight() + marginY;
+				}
 			}
 		}
 
