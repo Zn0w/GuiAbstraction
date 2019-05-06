@@ -35,4 +35,25 @@ namespace zn {
 		{}
 	};
 
+	class Button : public Element
+	{
+	private:
+		void(*action) ();
+
+	public:
+		Button(const char* c)
+			: Element(c)
+		{}
+
+		Button(const char* c, int w, int h)
+			: Element(c, w, h)
+		{}
+
+		Button(const char* c, int s_x, int s_y, int w, int h)
+			: Element(c, s_x, s_y, w, h)
+		{}
+
+		inline void setAction(void(*a) ()) { action = a; }
+	};
+
 }
