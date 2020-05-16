@@ -16,6 +16,8 @@ protected:
 
 
 public:
+	virtual void render(sf::RenderWindow* window) = 0;
+	
 	Component() {}
 	Component(Position p) { setPosition(p); }
 
@@ -31,6 +33,26 @@ protected:
 
 protected:
 	virtual void align() = 0;
+public:
+	void add(Component* component) { components.push_back(component); }
+	//void remove(Component* cpmponent) { components }
+
+	// remove??
+	//std::vector<Component*> getComponents() { return components; }
+};
+
+class AbsoluteContainer : public Container
+{
+protected:
+	void align() {}
+
+public:
+	void render(sf::RenderWindow* window)
+	{
+		// no align
+		for (Component* component : components)
+			component->render(window);
+	}
 };
 
 // Containers implementations ...
@@ -38,17 +60,22 @@ protected:
 class Label : public Component
 {
 protected:
-	std::string text;
+	sf::Text text;
 
 
 public:
 	Label() {}
 	Label(Position p) : Component(p) {}
-	Label(std::string stext) { setText(stext); }
-	Label(const char* stext) { setText(stext); }
+	Label(sf::Text stext) { setText(stext); }
 
-	void setText(std::string stext) { text = stext; }
-	void setText(const char* stext) { text = stext; }
+	void setText(sf::Text stext) { text = stext; }
+	sf::Text getText() { return text; }
+
+	void render(sf::RenderWindow* window)
+	{
+		text.setPosition(position.x, position.y);
+		window->draw(text);
+	}
 };
 
 class Button : public Label
@@ -56,14 +83,67 @@ class Button : public Label
 protected:
 	void(*handle_action) () = 0;
 
+	sf::Color fill_color = sf::Color(230, 230, 230, 255);
+	sf::Color outline_color = sf::Color(230, 230, 230, 255);
+
 
 public:
 	Button() {}
 	Button(Position p) : Label(p) {}
-	Button(std::string stext) : Label(stext) {}
-	Button(const char* stext) : Label(stext) {}
+	Button(sf::Text stext) : Label(stext) {}
+	Button(sf::Text stext, sf::Color sfill_color, sf::Color soutline_color) : Label(stext)
+	{
+		setFillColor(sfill_color);
+		setOutlineColor(soutline_color);
+	}
+	Button(sf::Color sfill_color, sf::Color soutline_color) {}
 
 	void setHandleAction(void(*shandle_action)()) { handle_action = shandle_action; }
+
+	void setFillColor(sf::Color sfill_color) { fill_color = sfill_color; }
+	sf::Color getFillColor() { return fill_color; }
+
+	void setOutlineColor(sf::Color soutline_color) { outline_color = soutline_color; }
+	sf::Color getOutlineColor() { return outline_color; }
+
+	void render(sf::RenderWindow* window)
+	{
+		sf::RectangleShape shape;
+		if (position.width == 0 && position.height == 0)
+		{
+			sf::FloatRect rect = text.getGlobalBounds();
+			shape.setSize(sf::Vector2f(rect.width * 1.3f, rect.height * 2.0f));
+		}
+		else
+			shape.setSize(sf::Vector2f(position.width, position.height));
+		
+		shape.setFillColor(fill_color);
+		shape.setOutlineThickness(2);
+		shape.setOutlineColor(outline_color);
+		shape.setPosition(position.x, position.y);
+		text.setPosition(position.x, position.y);
+		window->draw(shape);
+		window->draw(text);
+	}
 };
 
 // TODO : text field
+
+class Gui
+{
+protected:
+	Container* root;
+
+
+public:
+	Gui() {}
+	Gui(Container* container) { root = container; }
+
+	void setRoot(Container* container) { root = container; }
+	Container* getRoot() { return root; }
+
+	void display(sf::RenderWindow* window)
+	{
+		root->render(window);
+	}
+};

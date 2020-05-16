@@ -8,6 +8,22 @@ int main()
 	// create the window
 	sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
 
+	sf::Font font;
+	font.loadFromFile("sansation.ttf");
+
+	// init gui
+	Gui gui(new AbsoluteContainer());
+	
+	Label* hello_label = new Label({ 50, 50, 0, 0 });
+	hello_label->setText(sf::Text("Hello Label!", font));
+	gui.getRoot()->add(hello_label);
+
+	Button* start_button = new Button({ 250, 250, 0, 0 });
+	sf::Text button_text("Start", font, 20);
+	button_text.setFillColor(sf::Color::Black);
+	start_button->setText(button_text);
+	gui.getRoot()->add(start_button);
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{
@@ -24,7 +40,7 @@ int main()
 		window.clear(sf::Color::Black);
 
 		// draw everything here...
-		// window.draw(...);
+		gui.display(&window);
 
 		// end the current frame
 		window.display();
