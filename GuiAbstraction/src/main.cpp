@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <SFML/Graphics.hpp>
 
 #include "zga.h"
@@ -22,6 +24,9 @@ int main()
 	sf::Text button_text("Start", font, 20);
 	button_text.setFillColor(sf::Color::Black);
 	start_button->setText(button_text);
+	start_button->setHandleAction([]() {
+		std::cout << "Start Button is clicked!" << std::endl;
+	});
 	gui.getRoot()->add(start_button);
 
 	// run the program as long as the window is open

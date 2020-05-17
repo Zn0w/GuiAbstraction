@@ -35,7 +35,7 @@ protected:
 	virtual void align() = 0;
 public:
 	void add(Component* component) { components.push_back(component); }
-	//void remove(Component* cpmponent) { components }
+	//void remove(Component cpmponent) { components }
 
 	// remove??
 	//std::vector<Component*> getComponents() { return components; }
@@ -86,6 +86,8 @@ protected:
 	sf::Color fill_color = sf::Color(230, 230, 230, 255);
 	sf::Color outline_color = sf::Color(230, 230, 230, 255);
 
+	bool clicked = false;
+
 
 public:
 	Button() {}
@@ -124,6 +126,29 @@ public:
 		text.setPosition(position.x, position.y);
 		window->draw(shape);
 		window->draw(text);
+
+		// check if the button is clicked
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
+			sf::Vector2f button_pos = shape.getPosition();
+			sf::Vector2f button_size = shape.getPosition();
+			if (
+				mouse_pos.x <= button_pos.x + button_size.x &&
+				mouse_pos.x >= button_pos.x &&
+				mouse_pos.y <= button_pos.y + button_size.y &&
+				mouse_pos.y >= button_pos.y
+				)
+			{
+				clicked = true;
+			}
+		}
+		else if (clicked)
+		{
+			if (handle_action)
+				handle_action();
+			clicked = false;
+		}
 	}
 };
 
