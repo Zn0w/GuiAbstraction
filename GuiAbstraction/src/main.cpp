@@ -20,12 +20,17 @@ int main()
 	hello_label->setText(sf::Text("Hello Label!", font));
 	gui.getRoot()->add(hello_label);
 
+	Label* toggle_label = new Label({ 500, 150, 0, 0 });
+	toggle_label->setText(sf::Text("Toggle label", font));
+	gui.getRoot()->add(toggle_label);
+
 	Button* start_button = new Button({ 250, 250, 0, 0 });
 	sf::Text button_text("Start", font, 20);
 	button_text.setFillColor(sf::Color::Black);
 	start_button->setText(button_text);
-	start_button->setHandleAction([]() {
+	start_button->setHandleAction([&]() {
 		std::cout << "Start Button is clicked!" << std::endl;
+		toggle_label->setVisible(!toggle_label->isVisible());
 	});
 	gui.getRoot()->add(start_button);
 

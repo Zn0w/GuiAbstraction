@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
 
 struct Position
@@ -13,6 +14,7 @@ class Component
 {
 protected:
 	Position position;
+	bool visible = true;
 
 
 public:
@@ -23,6 +25,9 @@ public:
 
 	void setPosition(Position p) { position = p; }
 	Position getPosition() { return position; }
+
+	void setVisible(bool value) { visible = value; }
+	bool isVisible() { return visible; }
 };
 
 class Container : public Component
@@ -51,7 +56,8 @@ public:
 	{
 		// no align
 		for (Component* component : components)
-			component->render(window);
+			if (component->isVisible())
+				component->render(window);
 	}
 };
 
@@ -81,7 +87,7 @@ public:
 class Button : public Label
 {
 protected:
-	void(*handle_action) () = 0;
+	std::function<void()> handle_action = 0;
 
 	sf::Color fill_color = sf::Color(230, 230, 230, 255);
 	sf::Color outline_color = sf::Color(230, 230, 230, 255);
@@ -100,7 +106,7 @@ public:
 	}
 	Button(sf::Color sfill_color, sf::Color soutline_color) {}
 
-	void setHandleAction(void(*shandle_action)()) { handle_action = shandle_action; }
+	void setHandleAction(std::function<void()> shandle_action) { handle_action = shandle_action; }
 
 	void setFillColor(sf::Color sfill_color) { fill_color = sfill_color; }
 	sf::Color getFillColor() { return fill_color; }
