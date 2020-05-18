@@ -157,7 +157,7 @@ public:
 		text.setPosition(position.x, position.y);
 		sf::FloatRect rect = text.getLocalBounds();
 		position.width = rect.width;
-		position.width = rect.height;
+		position.height = rect.height;
 	}
 
 	sf::Text getText() { return text; }

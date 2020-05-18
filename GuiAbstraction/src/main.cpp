@@ -43,7 +43,7 @@ int main()
 	dummy_button_text.setFillColor(sf::Color::Black);
 	dummy_button2->setText(dummy_button_text);
 
-	gui.setRoot(new VerticalContainer(LEFT, { 0, 0, 800, 600 }));
+	gui.setRoot(new VerticalContainer(CENTER, { 0, 0, 800, 600 }));
 	gui.getRoot()->add(hello_label);
 	gui.getRoot()->add(toggle_label);
 	gui.getRoot()->add(start_button);
