@@ -34,6 +34,22 @@ int main()
 	});
 	gui.getRoot()->add(start_button);
 
+	sf::Text dummy_button_text("dummy button", font, 20);
+	Button* dummy_button1 = new Button({ 250, 250, 0, 0 });
+	dummy_button_text.setFillColor(sf::Color::Black);
+	dummy_button1->setText(dummy_button_text);
+
+	Button* dummy_button2 = new Button({ 250, 250, 0, 0 });
+	dummy_button_text.setFillColor(sf::Color::Black);
+	dummy_button2->setText(dummy_button_text);
+
+	gui.setRoot(new VerticalContainer(LEFT, { 0, 0, 800, 600 }));
+	gui.getRoot()->add(hello_label);
+	gui.getRoot()->add(toggle_label);
+	gui.getRoot()->add(start_button);
+	gui.getRoot()->add(dummy_button1);
+	gui.getRoot()->add(dummy_button2);
+
 	// run the program as long as the window is open
 	while (window.isOpen())
 	{

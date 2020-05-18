@@ -7,7 +7,7 @@
 
 struct Position
 {
-	int x, y, width, height;
+	int x = 0, y = 0, width = 0, height = 0;
 };
 
 class Component
@@ -61,6 +61,75 @@ public:
 	}
 };
 
+enum AlignMode
+{
+	LEFT, RIGHT, CENTER, CUSTOM
+};
+
+class VerticalContainer : public Container
+{
+protected:
+	AlignMode align_mode;
+	int margin = 25;
+
+
+protected:
+	void align()
+	{
+		int y = 0;
+		if (align_mode == LEFT)
+		{
+			for (Component* component : components)
+			{
+				Position new_position = component->getPosition();
+				new_position.x = position.x;
+				new_position.y = position.y + y;
+				component->setPosition(new_position);
+				y += new_position.height;
+				y += margin;
+			}
+		}
+		else if (align_mode == RIGHT)
+		{
+			for (Component* component : components)
+			{
+				Position new_position = component->getPosition();
+				new_position.x = position.x + position.width - new_position.width;
+				new_position.y = position.y + y;
+				component->setPosition(new_position);
+				y += new_position.height;
+				y += margin;
+			}
+		}
+		else if (align_mode == CENTER)
+		{
+			for (Component* component : components)
+			{
+				Position new_position = component->getPosition();
+				new_position.x = position.x + position.width / 2 - new_position.width / 2;
+				new_position.y = position.y + y;
+				component->setPosition(new_position);
+				y += new_position.height;
+				y += margin;
+			}
+		}
+	}
+
+public:
+	VerticalContainer(AlignMode s_align_mode, Position s_position) : align_mode(s_align_mode) { position = s_position; }
+
+	void setMargin(int value) { margin = value; }
+	int getMargin() { return margin; }
+
+	void render(sf::RenderWindow* window)
+	{
+		align();
+		for (Component* component : components)
+			if (component->isVisible())
+				component->render(window);
+	}
+};
+
 // Containers implementations ...
 
 class Label : public Component
@@ -71,20 +140,37 @@ protected:
 
 public:
 	Label() {}
-	Label(Position p) : Component(p) {}
-	Label(sf::Text stext) { setText(stext); }
+	
+	Label(Position p) : Component(p)
+	{
+		//text.setPosition(sf::Vector2f(position.x, position.y));
+	}
 
-	void setText(sf::Text stext) { text = stext; }
+	Label(sf::Text stext)
+	{
+		setText(stext);
+	}
+
+	void setText(sf::Text stext)
+	{
+		text = stext;
+		text.setPosition(position.x, position.y);
+		sf::FloatRect rect = text.getLocalBounds();
+		position.width = rect.width;
+		position.width = rect.height;
+	}
+
 	sf::Text getText() { return text; }
 
 	void render(sf::RenderWindow* window)
 	{
 		text.setPosition(position.x, position.y);
+
 		window->draw(text);
 	}
 };
 
-class Button : public Label
+class Button : public Component
 {
 protected:
 	std::function<void()> handle_action = 0;
@@ -94,42 +180,74 @@ protected:
 
 	bool clicked = false;
 
+	sf::RectangleShape shape;
+	sf::Text text;
+
 
 public:
-	Button() {}
-	Button(Position p) : Label(p) {}
-	Button(sf::Text stext) : Label(stext) {}
-	Button(sf::Text stext, sf::Color sfill_color, sf::Color soutline_color) : Label(stext)
+	Button()
 	{
-		setFillColor(sfill_color);
-		setOutlineColor(soutline_color);
+		shape.setFillColor(fill_color);
+		shape.setOutlineThickness(2);
+		shape.setOutlineColor(outline_color);
+	}
+	
+	Button(Position p) : Component(p)
+	{
+		/*shape.setFillColor(fill_color);
+		shape.setOutlineThickness(2);
+		shape.setOutlineColor(outline_color);
+		shape.setPosition(position.x, position.y);*/
+	}
+
+	Button(sf::Text s_text)
+	{
+		setText(s_text);
+	}
+
+	Button(sf::Text s_text, sf::Color s_fill_color, sf::Color s_outline_color)
+	{
+		setText(s_text);
+		setFillColor(s_fill_color);
+		setOutlineColor(s_outline_color);
 	}
 	Button(sf::Color sfill_color, sf::Color soutline_color) {}
 
+	void setText(sf::Text s_text)
+	{
+		text = s_text;
+		sf::FloatRect rect = text.getGlobalBounds();
+		position.width = rect.width * 1.3f;
+		position.height = rect.height * 2.0f;
+	}
+
+	sf::Text getText() { return text; }
+
 	void setHandleAction(std::function<void()> shandle_action) { handle_action = shandle_action; }
 
-	void setFillColor(sf::Color sfill_color) { fill_color = sfill_color; }
+	void setFillColor(sf::Color sfill_color)
+	{
+		fill_color = sfill_color;
+	}
+
 	sf::Color getFillColor() { return fill_color; }
 
-	void setOutlineColor(sf::Color soutline_color) { outline_color = soutline_color; }
+	void setOutlineColor(sf::Color soutline_color)
+	{
+		outline_color = soutline_color;
+	}
+
 	sf::Color getOutlineColor() { return outline_color; }
 
 	void render(sf::RenderWindow* window)
 	{
-		sf::RectangleShape shape;
-		if (position.width == 0 && position.height == 0)
-		{
-			sf::FloatRect rect = text.getGlobalBounds();
-			shape.setSize(sf::Vector2f(rect.width * 1.3f, rect.height * 2.0f));
-		}
-		else
-			shape.setSize(sf::Vector2f(position.width, position.height));
-		
 		shape.setFillColor(fill_color);
 		shape.setOutlineThickness(2);
 		shape.setOutlineColor(outline_color);
 		shape.setPosition(position.x, position.y);
+		shape.setSize(sf::Vector2f(position.width, position.height));
 		text.setPosition(position.x, position.y);
+		
 		window->draw(shape);
 		window->draw(text);
 
