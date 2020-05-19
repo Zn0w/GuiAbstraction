@@ -34,16 +34,23 @@ int main()
 	});
 	gui.getRoot()->add(start_button);
 
-	sf::Text dummy_button_text("dummy button", font, 20);
+	sf::Text dummy_button_text("dummy button 1", font, 20);
 	Button* dummy_button1 = new Button({ 250, 250, 0, 0 });
 	dummy_button_text.setFillColor(sf::Color::Black);
 	dummy_button1->setText(dummy_button_text);
+	dummy_button1->setHandleAction([]() {
+		std::cout << "Dummy button 1 is clicked!" << std::endl;
+	});
 
+	sf::Text dummy_button_text2("dummy button 2", font, 20);
 	Button* dummy_button2 = new Button({ 250, 250, 0, 0 });
-	dummy_button_text.setFillColor(sf::Color::Black);
-	dummy_button2->setText(dummy_button_text);
+	dummy_button_text2.setFillColor(sf::Color::Black);
+	dummy_button2->setText(dummy_button_text2);
+	dummy_button2->setHandleAction([]() {
+		std::cout << "Dummy button 2 is clicked!" << std::endl;
+	});
 
-	gui.setRoot(new VerticalContainer(CENTER, { 0, 0, 800, 600 }));
+	gui.setRoot(new VerticalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
 	gui.getRoot()->add(hello_label);
 	gui.getRoot()->add(toggle_label);
 	gui.getRoot()->add(start_button);
