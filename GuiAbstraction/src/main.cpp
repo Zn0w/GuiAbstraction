@@ -50,8 +50,8 @@ int main()
 		std::cout << "Dummy button 2 is clicked!" << std::endl;
 	});
 
-	//gui.setRoot(new VerticalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
-	gui.setRoot(new HorizontalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
+	gui.setRoot(new VerticalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
+	//gui.setRoot(new HorizontalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
 	gui.getRoot()->add(hello_label);
 	gui.getRoot()->add(toggle_label);
 	gui.getRoot()->add(start_button);

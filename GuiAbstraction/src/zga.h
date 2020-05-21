@@ -25,7 +25,7 @@ public:
 	Component() {}
 	Component(Position p) { setPosition(p); }
 
-	void setPosition(Position p) { position = p; }
+	void setPosition(Position s_position) { position = s_position; }
 	Position getPosition() { return position; }
 
 	void setVisible(bool value) { visible = value; }
@@ -287,19 +287,16 @@ protected:
 public:
 	Label() {}
 	
-	Label(Position p) : Component(p)
+	Label(Position p) : Component(p) {}
+
+	Label(sf::Text s_text)
 	{
-		//text.setPosition(sf::Vector2f(position.x, position.y));
+		setText(s_text);
 	}
 
-	Label(sf::Text stext)
+	void setText(sf::Text s_text)
 	{
-		setText(stext);
-	}
-
-	void setText(sf::Text stext)
-	{
-		text = stext;
+		text = s_text;
 		text.setPosition(position.x, position.y);
 		sf::FloatRect rect = text.getLocalBounds();
 		position.width = rect.width;
@@ -331,20 +328,9 @@ protected:
 
 
 public:
-	Button()
-	{
-		shape.setFillColor(fill_color);
-		shape.setOutlineThickness(2);
-		shape.setOutlineColor(outline_color);
-	}
+	Button() {}
 	
-	Button(Position p) : Component(p)
-	{
-		/*shape.setFillColor(fill_color);
-		shape.setOutlineThickness(2);
-		shape.setOutlineColor(outline_color);
-		shape.setPosition(position.x, position.y);*/
-	}
+	Button(Position p) : Component(p) {}
 
 	Button(sf::Text s_text)
 	{
@@ -357,7 +343,12 @@ public:
 		setFillColor(s_fill_color);
 		setOutlineColor(s_outline_color);
 	}
-	Button(sf::Color sfill_color, sf::Color soutline_color) {}
+
+	Button(sf::Color s_fill_color, sf::Color s_outline_color)
+	{
+		setFillColor(s_fill_color);
+		setOutlineColor(s_outline_color);
+	}
 
 	void setText(sf::Text s_text)
 	{
@@ -369,18 +360,18 @@ public:
 
 	sf::Text getText() { return text; }
 
-	void setHandleAction(std::function<void()> shandle_action) { handle_action = shandle_action; }
+	void setHandleAction(std::function<void()> s_handle_action) { handle_action = s_handle_action; }
 
-	void setFillColor(sf::Color sfill_color)
+	void setFillColor(sf::Color s_fill_color)
 	{
-		fill_color = sfill_color;
+		fill_color = s_fill_color;
 	}
 
 	sf::Color getFillColor() { return fill_color; }
 
-	void setOutlineColor(sf::Color soutline_color)
+	void setOutlineColor(sf::Color s_outline_color)
 	{
-		outline_color = soutline_color;
+		outline_color = s_outline_color;
 	}
 
 	sf::Color getOutlineColor() { return outline_color; }
