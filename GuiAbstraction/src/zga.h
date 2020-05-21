@@ -300,8 +300,8 @@ public:
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
-			sf::Vector2f button_pos = shape.getPosition();
-			sf::Vector2f button_size = shape.getPosition();
+			sf::Vector2f button_pos = sf::Vector2f(position.x, position.y);
+			sf::Vector2f button_size = sf::Vector2f(position.width, position.height);
 			if (
 				mouse_pos.x <= button_pos.x + button_size.x &&
 				mouse_pos.x >= button_pos.x &&
