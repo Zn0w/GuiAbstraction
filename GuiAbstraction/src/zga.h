@@ -4,6 +4,8 @@
 #include <string>
 #include <functional>
 
+#include <SFML/Graphics.hpp>
+
 
 struct Position
 {
@@ -71,7 +73,7 @@ enum VerticalAlignMode
 	TOP, BOTTOM, VERTICAL_CENTER, VERTICAL_CUSTOM
 };
 
-class VerticalContainer : public Container
+class AlignedContainer : public Container
 {
 protected:
 	HorizontalAlignMode hor_align_mode;
@@ -79,6 +81,19 @@ protected:
 	int margin = 25;
 
 
+public:
+	AlignedContainer(HorizontalAlignMode s_hor_align_mode, VerticalAlignMode s_vert_align_mode, Position s_position)
+		: hor_align_mode(s_hor_align_mode), vert_align_mode(s_vert_align_mode)
+	{
+		position = s_position;
+	}
+
+	void setMargin(int value) { margin = value; }
+	int getMargin() { return margin; }
+};
+
+class VerticalContainer : public AlignedContainer
+{
 protected:
 	void align()
 	{
@@ -158,13 +173,8 @@ protected:
 
 public:
 	VerticalContainer(HorizontalAlignMode s_hor_align_mode, VerticalAlignMode s_vert_align_mode, Position s_position) 
-		: hor_align_mode(s_hor_align_mode), vert_align_mode(s_vert_align_mode)
-	{
-		position = s_position;
-	}
-
-	void setMargin(int value) { margin = value; }
-	int getMargin() { return margin; }
+		: AlignedContainer(s_hor_align_mode, s_vert_align_mode, s_position)
+	{}
 
 	void render(sf::RenderWindow* window)
 	{
@@ -175,14 +185,8 @@ public:
 	}
 };
 
-class HorizontalContainer : public Container
+class HorizontalContainer : public AlignedContainer
 {
-protected:
-	HorizontalAlignMode hor_align_mode;
-	VerticalAlignMode vert_align_mode;
-	int margin = 25;
-
-
 protected:
 	void align()
 	{
@@ -261,13 +265,8 @@ protected:
 
 public:
 	HorizontalContainer(HorizontalAlignMode s_hor_align_mode, VerticalAlignMode s_vert_align_mode, Position s_position)
-		: hor_align_mode(s_hor_align_mode), vert_align_mode(s_vert_align_mode)
-	{
-		position = s_position;
-	}
-
-	void setMargin(int value) { margin = value; }
-	int getMargin() { return margin; }
+		: AlignedContainer(s_hor_align_mode, s_vert_align_mode, s_position)
+	{}
 
 	void render(sf::RenderWindow* window)
 	{
@@ -278,7 +277,6 @@ public:
 	}
 };
 
-// Containers implementations ...
 
 class Label : public Component
 {
