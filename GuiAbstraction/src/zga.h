@@ -437,7 +437,122 @@ public:
 	}
 };
 
-// TODO : text field
+class TextField : public Component
+{
+protected:
+	sf::Text text;
+
+	sf::Color outline_color = sf::Color(230, 230, 230, 255);
+	sf::Color inactive_fill_color = sf::Color(230, 230, 230, 255);
+	sf::Color active_fill_color = sf::Color(230, 230, 230, 255);
+
+	bool active = false;
+
+
+public:
+	TextField()
+	{
+		text.setColor(sf::Color::Black);
+		text.setString("");
+	}
+
+	TextField(Position p) : Component(p)
+	{
+		text.setColor(sf::Color::Black);
+		text.setString("");
+	}
+
+	TextField(sf::Text s_text)
+	{
+		setText(s_text);
+	}
+
+	TextField(sf::Text s_text, sf::Color s_outline_color, sf::Color s_inactive_fill_color, sf::Color s_active_fill_color)
+	{
+		setText(s_text);
+		setOutlineColor(s_outline_color);
+		setInactiveFillColor(s_inactive_fill_color);
+		setActiveFillColor(s_active_fill_color);
+	}
+
+	TextField(sf::Color s_outline_color, sf::Color s_inactive_fill_color, sf::Color s_active_fill_color)
+	{
+		text.setColor(sf::Color::Black);
+		text.setString("");
+
+		setOutlineColor(s_outline_color);
+		setInactiveFillColor(s_inactive_fill_color);
+		setActiveFillColor(s_active_fill_color);
+	}
+
+	void setText(sf::Text s_text)
+	{
+		text = s_text;
+		text.setPosition(position.x, position.y);
+		sf::FloatRect rect = text.getLocalBounds();
+		position.width = rect.width;
+		position.height = rect.height;
+	}
+
+	sf::Text getText() { return text; }
+
+	void setActiveFillColor(sf::Color s_fill_color)
+	{
+		active_fill_color = s_fill_color;
+	}
+
+	void setInactiveFillColor(sf::Color s_fill_color)
+	{
+		inactive_fill_color = s_fill_color;
+	}
+
+	void setOutlineColor(sf::Color s_outline_color)
+	{
+		outline_color = s_outline_color;
+	}
+
+	sf::Color getActiveFillColor() { return active_fill_color; }
+
+	sf::Color getInactiveFillColor() { return inactive_fill_color; }
+
+	sf::Color getOutlineColor() { return outline_color; }
+
+	void setWidth(int width) { position.width = width; }
+
+	void render(sf::RenderWindow* window)
+	{
+		text.setPosition(position.x, position.y);
+
+		window->draw(text);
+
+		// check if the text field is activated
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
+			sf::Vector2f textfield_pos = sf::Vector2f(position.x, position.y);
+			sf::Vector2f textfield_size = sf::Vector2f(position.width, position.height);
+			if (
+				mouse_pos.x <= textfield_pos.x + textfield_size.x &&
+				mouse_pos.x >= textfield_pos.x &&
+				mouse_pos.y <= textfield_pos.y + textfield_size.y &&
+				mouse_pos.y >= textfield_pos.y
+				)
+			{
+				active = true;
+
+			}
+			else
+			{
+				active = false;
+			}
+		}
+		
+		if (active)
+		{
+			
+		}
+	}
+};
 
 class Gui
 {

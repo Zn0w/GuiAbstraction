@@ -1,3 +1,5 @@
+// This is a test program
+
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
