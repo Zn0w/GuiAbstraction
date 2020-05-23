@@ -437,10 +437,33 @@ public:
 	}
 };
 
+class KeysTypedBuffer
+{
+private:
+	std::vector<sf::Event> key_type_events;
+
+public:
+	void process(sf::Event event)
+	{
+		if (event.type == sf::Event::TextEntered)
+		{
+			key_type_events.push_back(event);
+		}
+	}
+
+	void clear()
+	{
+		key_type_events.clear();
+	}
+
+	std::vector<sf::Event> getKeyTypeEvents() { return key_type_events; }
+};
+
 class TextField : public Component
 {
 protected:
 	sf::Text text;
+	sf::RectangleShape shape;
 
 	sf::Color outline_color = sf::Color(230, 230, 230, 255);
 	sf::Color inactive_fill_color = sf::Color(230, 230, 230, 255);
@@ -448,36 +471,50 @@ protected:
 
 	bool active = false;
 
+	KeysTypedBuffer* keys_typed_buffer = 0;
+
+	int cursor = -1;
+
 
 public:
-	TextField()
+	TextField(KeysTypedBuffer* s_keys_typed_buffer)
 	{
-		text.setColor(sf::Color::Black);
+		setKeysTypedBuffer(s_keys_typed_buffer);
+
+		text.setFillColor(sf::Color::Black);
 		text.setString("");
 	}
 
-	TextField(Position p) : Component(p)
+	TextField(KeysTypedBuffer* s_keys_typed_buffer, Position p) : Component(p)
 	{
-		text.setColor(sf::Color::Black);
+		setKeysTypedBuffer(s_keys_typed_buffer);
+
+		text.setFillColor(sf::Color::Black);
 		text.setString("");
 	}
 
-	TextField(sf::Text s_text)
+	TextField(KeysTypedBuffer* s_keys_typed_buffer, sf::Text s_text)
 	{
+		setKeysTypedBuffer(s_keys_typed_buffer);
+
 		setText(s_text);
 	}
 
-	TextField(sf::Text s_text, sf::Color s_outline_color, sf::Color s_inactive_fill_color, sf::Color s_active_fill_color)
+	TextField(KeysTypedBuffer* s_keys_typed_buffer, sf::Text s_text, sf::Color s_outline_color, sf::Color s_inactive_fill_color, sf::Color s_active_fill_color)
 	{
+		setKeysTypedBuffer(s_keys_typed_buffer);
+
 		setText(s_text);
 		setOutlineColor(s_outline_color);
 		setInactiveFillColor(s_inactive_fill_color);
 		setActiveFillColor(s_active_fill_color);
 	}
 
-	TextField(sf::Color s_outline_color, sf::Color s_inactive_fill_color, sf::Color s_active_fill_color)
+	TextField(KeysTypedBuffer* s_keys_typed_buffer, sf::Color s_outline_color, sf::Color s_inactive_fill_color, sf::Color s_active_fill_color)
 	{
-		text.setColor(sf::Color::Black);
+		setKeysTypedBuffer(s_keys_typed_buffer);
+
+		text.setFillColor(sf::Color::Black);
 		text.setString("");
 
 		setOutlineColor(s_outline_color);
@@ -489,9 +526,10 @@ public:
 	{
 		text = s_text;
 		text.setPosition(position.x, position.y);
-		sf::FloatRect rect = text.getLocalBounds();
-		position.width = rect.width;
-		position.height = rect.height;
+		position.height = text.getCharacterSize();
+		//sf::FloatRect rect = text.getLocalBounds();
+		//position.width = rect.width;
+		//position.height = rect.height;
 	}
 
 	sf::Text getText() { return text; }
@@ -519,10 +557,46 @@ public:
 
 	void setWidth(int width) { position.width = width; }
 
+	bool isActive() { return active; }
+
+	void activate()
+	{
+		active = true;
+		std::string content = text.getString();
+		cursor = content.length();
+		content += "|";
+		text.setString(content);
+	}
+
+	void deactivate()
+	{
+		active = false;
+		std::string content = text.getString();
+		content.erase(cursor, 1);
+		cursor = -1;
+		text.setString(content);
+	}
+
+	void setKeysTypedBuffer(KeysTypedBuffer* s_keys_typed_buffer)
+	{
+		keys_typed_buffer = s_keys_typed_buffer;
+	}
+
+	KeysTypedBuffer* getKeysTypedBuffer() { return keys_typed_buffer; }
+
 	void render(sf::RenderWindow* window)
 	{
+		if (active)
+			shape.setFillColor(active_fill_color);
+		else
+			shape.setFillColor(inactive_fill_color);
+		shape.setOutlineThickness(2);
+		shape.setOutlineColor(outline_color);
+		shape.setPosition(position.x, position.y);
+		shape.setSize(sf::Vector2f(position.width, position.height));
 		text.setPosition(position.x, position.y);
 
+		window->draw(shape);
 		window->draw(text);
 
 		// check if the text field is activated
@@ -538,18 +612,31 @@ public:
 				mouse_pos.y >= textfield_pos.y
 				)
 			{
-				active = true;
-
+				if (!active)
+				{
+					activate();
+				}
 			}
 			else
 			{
-				active = false;
+				deactivate();
 			}
 		}
 		
 		if (active)
 		{
-			
+			for (sf::Event key_type_event : keys_typed_buffer->getKeyTypeEvents())
+			{
+				if (key_type_event.text.unicode < 128)
+				{
+					std::string content = text.getString();
+					char c = static_cast<char>(key_type_event.text.unicode);
+					content.insert(cursor, std::string(1, c));
+					cursor++;
+					text.setString(content);
+				}
+			}
+			keys_typed_buffer->clear();
 		}
 	}
 };
