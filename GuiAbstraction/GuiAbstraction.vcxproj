@@ -145,6 +145,14 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\button.h" />
+    <ClInclude Include="src\components\textfield.h" />
+    <ClInclude Include="src\containers\absolute_container.h" />
+    <ClInclude Include="src\containers\aligned_container.h" />
+    <ClInclude Include="src\component.h" />
+    <ClInclude Include="src\container.h" />
+    <ClInclude Include="src\components\label.h" />
+    <ClInclude Include="src\gui.h" />
     <ClInclude Include="src\zga.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

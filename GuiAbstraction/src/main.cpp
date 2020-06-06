@@ -52,11 +52,11 @@ int main()
 		std::cout << "Dummy button 2 is clicked!" << std::endl;
 	});
 
-	KeysTypedBuffer keys_typed_buffer;
+	/*KeysTypedBuffer keys_typed_buffer;
 	sf::Text textfield_text_format("", font, 20);
 	textfield_text_format.setFillColor(sf::Color::Black);
 	TextField* textfield = new TextField(&keys_typed_buffer, textfield_text_format);
-	textfield->setWidth(50);
+	textfield->setWidth(50);*/
 
 	gui.setRoot(new VerticalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
 	//gui.setRoot(new HorizontalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
@@ -65,7 +65,7 @@ int main()
 	gui.getRoot()->add(start_button);
 	gui.getRoot()->add(dummy_button1);
 	gui.getRoot()->add(dummy_button2);
-	gui.getRoot()->add(textfield);
+	//gui.getRoot()->add(textfield);
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -77,8 +77,8 @@ int main()
 			// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else if (textfield->isActive())
-				keys_typed_buffer.process(event);
+			//else if (textfield->isActive())
+				//keys_typed_buffer.process(event);
 		}
 
 		// clear the window with black color
