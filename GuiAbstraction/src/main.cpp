@@ -15,57 +15,90 @@ int main()
 	sf::Font font;
 	font.loadFromFile("sansation.ttf");
 
-	// init gui
-	Gui gui(new AbsoluteContainer());
+	//// init gui
+	//Gui gui(new AbsoluteContainer());
+	//
+	//Label* hello_label = new Label({ 50, 50, 0, 0 });
+	//hello_label->setText(sf::Text("Hello Label!", font));
+	//gui.getRoot()->add(hello_label);
+
+	//Label* toggle_label = new Label({ 500, 150, 0, 0 });
+	//toggle_label->setText(sf::Text("Toggle label", font));
+	//gui.getRoot()->add(toggle_label);
+
+	//Button* start_button = new Button({ 250, 250, 0, 0 });
+	//sf::Text button_text("Start", font, 20);
+	//button_text.setFillColor(sf::Color::Black);
+	//start_button->setText(button_text);
+	//start_button->setHandleAction([&]() {
+	//	std::cout << "Start Button is clicked!" << std::endl;
+	//	toggle_label->setVisible(!toggle_label->isVisible());
+	//});
+	//gui.getRoot()->add(start_button);
+
+	//sf::Text dummy_button_text("dummy button 1", font, 20);
+	//Button* dummy_button1 = new Button({ 250, 250, 0, 0 });
+	//dummy_button_text.setFillColor(sf::Color::Black);
+	//dummy_button1->setText(dummy_button_text);
+	//dummy_button1->setHandleAction([]() {
+	//	std::cout << "Dummy button 1 is clicked!" << std::endl;
+	//});
+
+	//sf::Text dummy_button_text2("dummy button 2", font, 20);
+	//Button* dummy_button2 = new Button({ 250, 250, 0, 0 });
+	//dummy_button_text2.setFillColor(sf::Color::Black);
+	//dummy_button2->setText(dummy_button_text2);
+	//dummy_button2->setHandleAction([]() {
+	//	std::cout << "Dummy button 2 is clicked!" << std::endl;
+	//});
+
+	///*KeysTypedBuffer keys_typed_buffer;
+	//sf::Text textfield_text_format("", font, 20);
+	//textfield_text_format.setFillColor(sf::Color::Black);
+	//TextField* textfield = new TextField(&keys_typed_buffer, textfield_text_format);
+	//textfield->setWidth(50);*/
+
+	//gui.setRoot(new VerticalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
+	////gui.setRoot(new HorizontalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
+	//gui.getRoot()->add(hello_label);
+	//gui.getRoot()->add(toggle_label);
+	//gui.getRoot()->add(start_button);
+	//gui.getRoot()->add(dummy_button1);
+	//gui.getRoot()->add(dummy_button2);
+	////gui.getRoot()->add(textfield);
+
+	Gui game_main_menu(new HorizontalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
 	
-	Label* hello_label = new Label({ 50, 50, 0, 0 });
-	hello_label->setText(sf::Text("Hello Label!", font));
-	gui.getRoot()->add(hello_label);
-
-	Label* toggle_label = new Label({ 500, 150, 0, 0 });
-	toggle_label->setText(sf::Text("Toggle label", font));
-	gui.getRoot()->add(toggle_label);
-
-	Button* start_button = new Button({ 250, 250, 0, 0 });
-	sf::Text button_text("Start", font, 20);
-	button_text.setFillColor(sf::Color::Black);
-	start_button->setText(button_text);
-	start_button->setHandleAction([&]() {
-		std::cout << "Start Button is clicked!" << std::endl;
-		toggle_label->setVisible(!toggle_label->isVisible());
-	});
-	gui.getRoot()->add(start_button);
-
-	sf::Text dummy_button_text("dummy button 1", font, 20);
-	Button* dummy_button1 = new Button({ 250, 250, 0, 0 });
-	dummy_button_text.setFillColor(sf::Color::Black);
-	dummy_button1->setText(dummy_button_text);
-	dummy_button1->setHandleAction([]() {
-		std::cout << "Dummy button 1 is clicked!" << std::endl;
+	GameMenuItem continue_game_item(sf::Text("Continue", font));
+	continue_game_item.setHandleAction([]() {
+		std::cout << "Load latest game save" << std::endl;
 	});
 
-	sf::Text dummy_button_text2("dummy button 2", font, 20);
-	Button* dummy_button2 = new Button({ 250, 250, 0, 0 });
-	dummy_button_text2.setFillColor(sf::Color::Black);
-	dummy_button2->setText(dummy_button_text2);
-	dummy_button2->setHandleAction([]() {
-		std::cout << "Dummy button 2 is clicked!" << std::endl;
+	GameMenuItem new_game_item(sf::Text("New Game", font));
+	new_game_item.setHandleAction([]() {
+		std::cout << "Create new game" << std::endl;
 	});
 
-	/*KeysTypedBuffer keys_typed_buffer;
-	sf::Text textfield_text_format("", font, 20);
-	textfield_text_format.setFillColor(sf::Color::Black);
-	TextField* textfield = new TextField(&keys_typed_buffer, textfield_text_format);
-	textfield->setWidth(50);*/
+	GameMenuItem load_game_item(sf::Text("Load", font));
+	load_game_item.setHandleAction([]() {
+		std::cout << "Show list of game saves" << std::endl;
+	});
 
-	gui.setRoot(new VerticalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
-	//gui.setRoot(new HorizontalContainer(HORIZONTAL_CENTER, VERTICAL_CENTER, { 0, 0, 800, 600 }));
-	gui.getRoot()->add(hello_label);
-	gui.getRoot()->add(toggle_label);
-	gui.getRoot()->add(start_button);
-	gui.getRoot()->add(dummy_button1);
-	gui.getRoot()->add(dummy_button2);
-	//gui.getRoot()->add(textfield);
+	GameMenuItem settings_game_item(sf::Text("Settings", font));
+	settings_game_item.setHandleAction([]() {
+		std::cout << "Open settings screen" << std::endl;
+	});
+
+	GameMenuItem quit_game_item(sf::Text("Quit", font));
+	quit_game_item.setHandleAction([]() {
+		std::cout << "Exit the game" << std::endl;
+	});
+
+	game_main_menu.getRoot()->add(&continue_game_item);
+	game_main_menu.getRoot()->add(&new_game_item);
+	game_main_menu.getRoot()->add(&load_game_item);
+	game_main_menu.getRoot()->add(&settings_game_item);
+	game_main_menu.getRoot()->add(&quit_game_item);
 
 	// run the program as long as the window is open
 	while (window.isOpen())
@@ -85,7 +118,8 @@ int main()
 		window.clear(sf::Color::Black);
 
 		// draw everything here...
-		gui.display(&window);
+		//gui.display(&window);
+		game_main_menu.display(&window);
 
 		// end the current frame
 		window.display();

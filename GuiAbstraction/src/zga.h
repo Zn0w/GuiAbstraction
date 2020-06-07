@@ -10,3 +10,4 @@
 #include "components/label.h"
 #include "components/button.h"
 #include "components/textfield.h"
+#include "components/game_menu_item.h"
